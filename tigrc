@@ -96,13 +96,13 @@ bind generic	l	view-log
 bind generic	t	view-tree
 bind generic	f	view-blob
 bind generic	B	view-blame
-bind generic	H	view-branch
+bind generic	r	view-branch
 bind generic	p	view-pager
 bind generic	h	view-help
-bind generic	S	view-status
+bind generic	s	view-status
 bind generic	c	view-stage
 bind generic	y	view-stash
-bind generic	G	view-grep
+bind generic	g	view-grep
 
 # View manipulation
 bind generic	Enter	enter			# Enter and open selected entry
@@ -154,8 +154,8 @@ bind generic	Insert	scroll-line-up
 bind generic	^Y	scroll-line-up
 bind generic	Delete	scroll-line-down
 bind generic	^E	scroll-line-down
-bind generic	w	scroll-page-up
-bind generic	s	scroll-page-down
+bind generic	ScrBack	scroll-page-up
+bind generic	ScrFwd	scroll-page-down
 
 # Searching
 bind generic	/	search
@@ -172,7 +172,7 @@ bind generic	.	:toggle show-line-numbers
 						# Toggle line numbers
 bind generic	D	:toggle show-date	# Toggle date display
 bind generic	A	:toggle show-author	# Toggle author display
-bind generic	g	:toggle show-rev-graph	# Toggle revision graph visualization
+bind generic	G	:toggle show-rev-graph	# Toggle revision graph visualization
 bind generic	~	:toggle line-graphics	# Toggle (line) graphics mode
 bind generic	Hash	:toggle show-filename	# Toggle file name display
 bind generic	F	:toggle show-refs	# Toggle reference display (tags/branches)
@@ -190,8 +190,7 @@ bind generic	%	:toggle file-filter
 # Misc
 bind generic	e	edit			# Open in editor
 bind generic	:	prompt			# Open the prompt
-bind generic	r	screen-redraw		# Redraw the screen
-bind generic	^L	screen-redraw
+bind generic	^L	screen-redraw		# Redraw the screen
 bind generic	z	stop-loading		# Stop all loading views
 bind generic	v	show-version		# Show Tig version
 
