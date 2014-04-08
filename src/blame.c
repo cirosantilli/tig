@@ -91,6 +91,14 @@ blame_open(struct view *view, enum open_flags flags)
 	size_t i;
 
 	view_column_init(view, blame_columns, ARRAY_SIZE(blame_columns));
+	if (view->columns) {
+		struct view_column *column = get_view_column(view, VIEW_COLUMN_ID);
+
+		if (column) {
+			column->opt.id.show = TRUE;
+			column->opt.id.color = TRUE;
+		}
+	}
 
 	if (opt_blame_options) {
 		for (i = 0; opt_blame_options[i]; i++) {
@@ -250,7 +258,7 @@ blame_read_file(struct view *view, const char *text, struct blame_state *state)
 		size_t textlen = strlen(text);
 		struct blame *blame;
 
-		if (!add_line_alloc(view, &blame, LINE_ID, textlen, FALSE))
+		if (!add_line_alloc(view, &blame, LINE_DEFAULT, textlen, FALSE))
 			return FALSE;
 
 		blame->commit = NULL;
@@ -330,47 +338,6 @@ blame_get_column_data(struct view *view, const struct line *line, struct view_co
 
 	column_data->text = blame->text;
 
-	return TRUE;
-}
-
-static bool
-blame_draw(struct view *view, struct line *line, unsigned int lineno)
-{
-	struct blame_state *state = view->private;
-	struct blame *blame = line->data;
-	struct time *time = NULL;
-	const char *id = NULL, *filename = NULL;
-	const struct ident *author = NULL;
-	struct view_column *column = get_view_column(view, VIEW_COLUMN_ID);
-
-	if (column) {
-		column->opt.id.show = TRUE;
-		column->opt.id.color = TRUE;
-	}
-
-	if (blame->commit && blame->commit->filename) {
-		id = blame->commit->id;
-		author = blame->commit->author;
-		filename = blame->commit->filename;
-		time = &blame->commit->time;
-	}
-
-	if (draw_date(view, &view->columns[0], time))
-		return TRUE;
-
-	if (draw_author(view, &view->columns[1], author))
-		return TRUE;
-
-	if (draw_filename(view, &view->columns[2], filename, state->auto_filename_display, 0))
-		return TRUE;
-
-	if (draw_id(view, &view->columns[3], id))
-		return TRUE;
-
-	if (draw_lineno_custom(view, &view->columns[4], lineno))
-		return TRUE;
-
-	draw_text(view, LINE_DEFAULT, blame->text);
 	return TRUE;
 }
 
@@ -552,7 +519,7 @@ static struct view_ops blame_ops = {
 	sizeof(struct blame_state),
 	blame_open,
 	blame_read,
-	blame_draw,
+	view_column_draw,
 	blame_request,
 	view_column_grep,
 	blame_select,
